@@ -1,0 +1,56 @@
+namespace: /celeste
+
+stack:
+    defines: process-group
+    runnable-list:
+        - /celeste/db
+        - /celeste/backend
+
+db:
+    defines: runnable
+    # inherits: postgres/12-alpine
+    containers:
+        defines: containers
+        db:
+            image: postgres:11-alpine
+            ports:
+            - "0.0.0.0:5432:5432" # for debugging db
+    variables:
+        defines: variables
+        image-tag: 11-alpine
+        POSTGRES_DB:
+            type: string
+            value: 'court'
+            env: POSTGRES_DB
+        POSTGRES_USER:
+            type: string
+            value: 'court'
+            env: POSTGRES_USER
+        POSTGRES_PASSWORD:
+            type: string
+            value: 'court'
+            env: POSTGRES_PASSWORD
+
+backend:
+    defines: runnable
+    version: 0.0.1
+    containers:
+        defines: containers
+        server:
+            image: localhost:5000/celeste-backend
+            bash: npm run start:server
+        services:
+            image: localhost:5000/celeste-backend
+            bash: npm run start:services
+        # ui:
+        #     image: localhost:5000/celeste-backend
+        #     bash: npm run start:app
+        #     ports:
+        #         - "3000:3000"
+        #         - "35729:35729" # port used for hot-reloading
+    variables:
+        defines: variables
+        DB_HOST:
+            type: string
+            value: <- get-hostname("celeste/db", "db")
+            env: DB_HOST
