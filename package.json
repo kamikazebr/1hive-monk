@@ -1,0 +1,16 @@
+{
+  "name": "1hive-monk",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "yarn build && monk load celeste-backend.yaml && monk update celeste/stack"
+    ,"build": "node env.js --inyml celeste-backend_template.yaml  --outyml celeste-backend.yaml -r backend"
+  },
+  "dependencies": {
+    "commander": "^9.3.0"
+  },
+  "devDependencies": {
+    "dotenv": "^16.0.1",
+    "js-yaml": "^4.1.0"
+  }
+}
