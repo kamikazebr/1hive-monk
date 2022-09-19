@@ -3,8 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "yarn build && monk load celeste-backend.yaml && monk update celeste/stack"
-    ,"build": "node env.js --inyml celeste-backend_template.yaml  --outyml celeste-backend.yaml -r backend"
+    "start": "yarn build-celeste && monk load celeste/celeste-backend.yaml && monk update celeste/stack"
+    ,"build-celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml -r backend"
   },
   "dependencies": {
     "commander": "^9.3.0"

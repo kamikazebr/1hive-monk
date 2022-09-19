@@ -10,60 +10,69 @@ program
     "-o, --outyml <type>",
     "Output where will write the new file modified"
   )
-  .requiredOption(
-    "-r, --runnable <type>",
-    "Name of runnable will receive the variables"
+  .argument(
+    "<runnables...>",
+    "one or more runnable name will receive the variables"
   );
+// .requiredOption(
+//   "-r, --runnable <type>",
+//   "Name of runnable will receive the variables"
+// );
 
 program.parse(process.argv);
 
 const ONLY_NUMBER = new RegExp(/^[0-9]+$/);
 
-function buildYml({ parsed }, { inyml, outyml, runnable }) {
+function buildYml({ parsed }, { inyml, outyml }, runnables) {
   try {
     const fileContents = fs.readFileSync(inyml, "utf8");
     const data = yaml.load(fileContents);
-
-    // console.log(data);
-    const paths = `${runnable}.variables`.split(".");
-    let dataTree = data;
-    for (const path of paths) {
-      if (path in dataTree) {
-        dataTree = dataTree[path];
-      } else {
-        throw new Error(`'${path}' runnable not found in ${inyml}`);
-      }
-    }
-    // console.log(dataTree);
-    if ("defines" in dataTree && dataTree.defines === "variables") {
-      console.log(`nice! have ${Object.keys(dataTree).length - 1} vars`);
-
-      for (const key of Object.keys(parsed)) {
-        if (Object.keys(dataTree).includes(key)){
-          console.log(`${key} already exist in ${inyml}-> Not overriding existing variables`)
-          continue;
-        }
-        let someEnv = parsed[key];
-        // console.log(key);
-        if (ONLY_NUMBER.test(someEnv)) {
-          let someNumber = parseInt(someEnv);
-          dataTree[key.trim()] = { type: "int", value: someNumber, env: key };
-          //   console.log(someNumber);
+    console.log("runnable", runnables);
+    for (const key in runnables) {
+      const runnable = runnables[key];
+      console.log(`Starting injecting in ${runnable}.variables`)
+      const paths = `${runnable}.variables`.split(".");
+      let dataTree = data;
+      for (const path of paths) {
+        if (path in dataTree) {
+          dataTree = dataTree[path];
         } else {
-          dataTree[key.trim()] = { type: "string", value: someEnv, env: key };
-          //   console.log(someEnv);
+          throw new Error(`'${path}' runnable not found in ${inyml}`);
         }
       }
-      //   console.log(dataTree);
-      //   console.log(data);
-      yamlStr = yaml.dump(data, {
-        styles: {
-          "!!null": "empty",
-        },
-      });
-      fs.writeFileSync(outyml, yamlStr, "utf8");
-    } else {
-      console.error(`variables path missing defines:variables`);
+      // console.log(dataTree);
+      if ("defines" in dataTree && dataTree.defines === "variables") {
+        console.log(`nice! have ${Object.keys(dataTree).length - 1} vars`);
+
+        for (const key of Object.keys(parsed)) {
+          if (Object.keys(dataTree).includes(key)) {
+            console.log(
+              `${key} already exist in ${inyml}-> Not overriding existing variables`
+            );
+            continue;
+          }
+          let someEnv = parsed[key];
+          // console.log(key);
+          if (ONLY_NUMBER.test(someEnv)) {
+            let someNumber = parseInt(someEnv);
+            dataTree[key.trim()] = { type: "int", value: someNumber, env: key };
+            //   console.log(someNumber);
+          } else {
+            dataTree[key.trim()] = { type: "string", value: someEnv, env: key };
+            //   console.log(someEnv);
+          }
+        }
+        //   console.log(dataTree);
+        //   console.log(data);
+        yamlStr = yaml.dump(data, {
+          styles: {
+            "!!null": "empty",
+          },
+        });
+        fs.writeFileSync(outyml, yamlStr, "utf8");
+      } else {
+        console.error(`variables path missing defines:variables`);
+      }
     }
   } catch (e) {
     console.log(e);
@@ -72,4 +81,4 @@ function buildYml({ parsed }, { inyml, outyml, runnable }) {
 
 const options = program.opts();
 
-buildYml(objEnv, options);
+buildYml(objEnv, options, program.args);

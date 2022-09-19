@@ -6,6 +6,12 @@ stack:
         - /celeste/db
         - /celeste/backend
 
+stack-localhost:
+    defines: process-group
+    runnable-list:
+        - /celeste/db
+        - /celeste/backend-local
+
 db:
     defines: runnable
     # inherits: postgres/12-alpine
@@ -37,17 +43,29 @@ backend:
     containers:
         defines: containers
         server:
+            image: gcr.io/hive-flora/celeste-backend
+            bash: npm run start:server
+        services:
+            image: gcr.io/hive-flora/celeste-backend
+            bash: npm run start:services
+    variables:
+        defines: variables
+        DB_HOST:
+            type: string
+            value: <- get-hostname("celeste/db", "db")
+            env: DB_HOST
+
+backend-local:
+    defines: runnable
+    version: 0.0.1
+    containers:
+        defines: containers
+        server:
             image: localhost:5000/celeste-backend
             bash: npm run start:server
         services:
             image: localhost:5000/celeste-backend
             bash: npm run start:services
-        # ui:
-        #     image: localhost:5000/celeste-backend
-        #     bash: npm run start:app
-        #     ports:
-        #         - "3000:3000"
-        #         - "35729:35729" # port used for hot-reloading
     variables:
         defines: variables
         DB_HOST:
