@@ -1,7 +1,7 @@
 # If you are absolutely sure that you want to ignore the above files from talisman detectors, consider pasting the following format in .talismanrc file in the project root
 fileignoreconfig:
 - filename: scripts/env.js
-  checksum: 0358b2c3c90ac7b38725b33150107e3c81e9cf6e44199fdf3c3583ca51530dd9
+  checksum: fe4c243784a2a6a9b09b1cace3d3214fe1842249cba4cfba073e74f161c89815
   ignore_detectors: []
 scopeconfig:
 - scope: node
