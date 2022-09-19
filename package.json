@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "start": "yarn build-celeste && monk load celeste/celeste-backend.yaml && monk update celeste/stack"
-    ,"build-celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml -r backend"
+    ,"start-local": "yarn build-celeste && monk load celeste/celeste-backend.yaml && monk update celeste/stack-local"
+    ,"build-celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml backend backend-local"
   },
   "dependencies": {
     "commander": "^9.3.0"

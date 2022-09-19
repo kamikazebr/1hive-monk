@@ -25,8 +25,30 @@ yarn
 
 > Tested in **yarn** version **1.22.19**
 
+Run
+```bash
+yarn start
+```
+
+That will generate new yaml file based in the **celeste-backend_template.yaml** and start automatically.
+
+> **yarn start-local** it's just used togheter with Docker Registry 2, will be one example how do that in the future.
 
 
+## Checking Logs
+
+Just run
+```bash
+monk logs -f
+```
+
+And choose the celeste services to see the current logs in real tiem
+
+If you want full log just run 
+
+```bash
+monk logs
+```
 
 
 
