@@ -1,4 +1,5 @@
-const objEnv = require("dotenv").config({ path: "./.env" });
+const ENV_PATH = "./.env";
+const objEnv = require("dotenv").config({ path: ENV_PATH });
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { program } = require("commander");
@@ -25,6 +26,10 @@ const ONLY_NUMBER = new RegExp(/^[0-9]+$/);
 
 function buildYml({ parsed }, { inyml, outyml }, runnables) {
   try {
+
+    if (!parsed){
+      throw new Error(`File ${ENV_PATH} not found.`);
+    }
     const fileContents = fs.readFileSync(inyml, "utf8");
     const data = yaml.load(fileContents);
     console.log("runnable", runnables);
@@ -75,7 +80,7 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
       }
     }
   } catch (e) {
-    console.log(e);
+    console.log(`Error: ${e}`);
   }
 }
 
