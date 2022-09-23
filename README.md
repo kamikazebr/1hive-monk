@@ -15,6 +15,11 @@ Check the version
 monkd -v
 ```
 
+Run the monk login
+
+```bash
+monk login
+```
 
 ## Running the services
 
