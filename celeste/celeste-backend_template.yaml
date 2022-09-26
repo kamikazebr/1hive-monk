@@ -1,12 +1,12 @@
-namespace: /celeste
+namespace: /1hive
 
-stack:
+celeste-stack:
     defines: process-group
     runnable-list:
         - /celeste/db
         - /celeste/backend
 
-stack-localhost:
+celeste-stack-localhost:
     defines: process-group
     runnable-list:
         - /celeste/db

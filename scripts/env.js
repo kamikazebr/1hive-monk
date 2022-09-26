@@ -1,11 +1,16 @@
-const ENV_PATH = "./.env";
-const objEnv = require("dotenv").config({ path: ENV_PATH });
+let ENV_PATH = ".env";
+const dotenv = require("dotenv");
 const fs = require("fs");
 const yaml = require("js-yaml");
 const { program } = require("commander");
 
 program
   .version("0.0.3", "-v, --vers", "output the current version")
+  .option(
+    "-e, --env <path>",
+    "Path relative to root to env file (Eg:.env)",
+    ".env"
+  )
   .requiredOption("-i, --inyml <type>", "Input the yaml to add variables")
   .requiredOption(
     "-o, --outyml <type>",
@@ -26,8 +31,7 @@ const ONLY_NUMBER = new RegExp(/^[0-9]+$/);
 
 function buildYml({ parsed }, { inyml, outyml }, runnables) {
   try {
-
-    if (!parsed){
+    if (!parsed) {
       throw new Error(`File ${ENV_PATH} not found.`);
     }
     const fileContents = fs.readFileSync(inyml, "utf8");
@@ -35,7 +39,7 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
     console.log("runnable", runnables);
     for (const key in runnables) {
       const runnable = runnables[key];
-      console.log(`Starting injecting in ${runnable}.variables`)
+      console.log(`Starting injecting in ${runnable}.variables`);
       const paths = `${runnable}.variables`.split(".");
       let dataTree = data;
       for (const path of paths) {
@@ -67,13 +71,15 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
             //   console.log(someEnv);
           }
         }
-        //   console.log(dataTree);
+        // console.log(dataTree);
         //   console.log(data);
         yamlStr = yaml.dump(data, {
           styles: {
             "!!null": "empty",
           },
+          lineWidth: -1,
         });
+        // console.log(yamlStr);
         fs.writeFileSync(outyml, yamlStr, "utf8");
       } else {
         console.error(`variables path missing defines:variables`);
@@ -85,5 +91,11 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
 }
 
 const options = program.opts();
+
+ENV_PATH = `./${options.env}`;
+
+const objEnv = dotenv.config({ path: ENV_PATH });
+
+console.log(`ENV in ${ENV_PATH} loaded.`);
 
 buildYml(objEnv, options, program.args);

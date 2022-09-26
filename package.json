@@ -3,9 +3,15 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "start": "yarn build-celeste && monk load celeste/celeste-backend.yaml && monk run celeste/stack"
-    ,"start-local": "yarn build-celeste && monk load celeste/celeste-backend.yaml && monk run celeste/stack-local"
-    ,"build-celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml backend backend-local"
+    "start": "yarn start:celeste && yarn start:price-oracle",
+    "start:celeste": "yarn build:celeste && monk load celeste/celeste-backend.yaml && monk run 1hive/celeste-stack",
+    "start:price-oracle": "yarn build:price-oracle && monk load others/price-oracle.yaml && monk run 1hive/price-oracle",
+    "logs:price-oracle": "monk logs price-oracle/price-oracle",
+    "start:celeste-local": "yarn build:celeste && monk load celeste/celeste-backend.yaml && 1hive/celeste-stack-localhost",
+    "build:celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml backend backend-local",
+    "build:price-oracle": "node scripts/env.js --env others/.env --inyml others/price-oracle_template.yaml  --outyml others/price-oracle.yaml price-oracle",
+    "stop:old": "monk stop celeste/stack",
+    "m:p": "monk purge"
   },
   "dependencies": {
     "commander": "^9.3.0"
