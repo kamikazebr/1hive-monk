@@ -1,0 +1,12 @@
+namespace: /1hive
+
+supply-api:
+    defines: runnable
+    version: 0.0.1
+    containers:
+        defines: containers
+        service:
+            image: 1hive/supply-api:latest
+            bash: npm run start
+    variables:
+        defines: variables

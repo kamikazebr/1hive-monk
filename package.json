@@ -8,6 +8,7 @@
     "start:price-oracle": "yarn build:price-oracle && monk load others/price-oracle.yaml && monk run 1hive/price-oracle",
     "start:fluid": "yarn build:fluid && monk load others/fluid-proposals.yaml && monk run 1hive/fluid-proposals",
     "start:honeymaker": "yarn build:honeymaker && monk load others/honeymaker.yaml && monk run 1hive/honeymaker",
+    "start:supply": "monk load others/supply-api.yaml && monk run 1hive/supply-api",
     "logs:price-oracle": "monk logs price-oracle/price-oracle",
     "start:celeste-local": "yarn build:celeste && monk load celeste/celeste-backend.yaml && 1hive/celeste-stack-localhost",
     "build:celeste": "node scripts/env.js --inyml celeste/celeste-backend_template.yaml  --outyml celeste/celeste-backend.yaml backend backend-local",
