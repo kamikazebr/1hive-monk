@@ -2,16 +2,21 @@ namespace: /1hive
 
 celeste-stack:
     defines: process-group
+    # balancers:
+    #     app-balancer:
+    #         type: elastic-ip
+    #         instances:
+    #             - /celeste/backend
     runnable-list:
-        - /celeste/db
-        - /celeste/backend
+        - 1hive/db
+        - 1hive/backend
 
 celeste-stack-localhost:
-    defines: process-group
-    runnable-list:
-        - /celeste/db
-        - /celeste/backend-local
-
+  defines: process-group
+  runnable-list:
+    - 1hive/db
+    - 1hive/backend-local
+    
 db:
     defines: runnable
     # inherits: postgres/12-alpine
@@ -45,6 +50,8 @@ backend:
         server:
             image: gcr.io/hive-flora/celeste-backend
             bash: npm run start:server
+            ports:
+                - 0.0.0.0:8000:8000
         services:
             image: gcr.io/hive-flora/celeste-backend
             bash: npm run start:services
@@ -52,7 +59,7 @@ backend:
         defines: variables
         DB_HOST:
             type: string
-            value: <- get-hostname("celeste/db", "db")
+            value: <- get-hostname("1hive/db", "db")
             env: DB_HOST
 
 backend-local:
@@ -70,5 +77,5 @@ backend-local:
         defines: variables
         DB_HOST:
             type: string
-            value: <- get-hostname("celeste/db", "db")
+            value: <- get-hostname("1hive/db", "db")
             env: DB_HOST
