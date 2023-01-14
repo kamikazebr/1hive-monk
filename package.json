@@ -5,6 +5,7 @@
   "scripts": {
     "start": "yarn start:celeste && yarn start:price-oracle",
     "start:celeste": "yarn build:celeste && monk load celeste/celeste-backend.yaml && monk run 1hive/celeste-stack",
+    "update:celeste": "yarn build:celeste && monk load celeste/celeste-backend.yaml && monk update 1hive/celeste-stack",
     "start:price-oracle": "yarn build:price-oracle && monk load others/price-oracle.yaml && monk run 1hive/price-oracle",
     "update:price-oracle": "yarn build:price-oracle && monk load others/price-oracle.yaml && monk update 1hive/price-oracle",
     "start:fluid": "yarn build:fluid && monk load others/fluid-proposals.yaml && monk run 1hive/fluid-proposals",

@@ -4,6 +4,13 @@ Services, nodes and stuffs of 1Hives using Monk.io
 
 ## Installing Monk 3.3.6 (Linux based)
 
+> For downgrade use the command
+
+```bash
+apt remove monk monkd
+apt purge monk monkd
+```
+
 > For others OS check the Docs https://docs.monk.io/docs/monk-in-10
 
 ```bash
@@ -57,3 +64,7 @@ If you want full log just run
 ```bash
 monk logs
 ```
+
+### Before update or contributing in the code
+
+Install [Talisman](https://github.com/thoughtworks/talisman) pre-commit hook to avoid to leak sensitive data, like private keys and passwords.
