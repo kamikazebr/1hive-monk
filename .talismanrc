@@ -3,5 +3,7 @@ fileignoreconfig:
 - filename: scripts/env.js
   checksum: 3de52614c958835befe0683f95be9d5276e0e499424bbfc0fc56217b66c4aaae
   ignore_detectors: []
+- filename: .env.gnosis.sample
+  checksum: bc29920a28cc01874624c608929059ce0d6ab7f56cb828fb38b87e80a07ebf1d
 scopeconfig:
 - scope: node
