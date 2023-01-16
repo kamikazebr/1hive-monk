@@ -29,7 +29,7 @@ program.parse(process.argv);
 
 const ONLY_NUMBER = new RegExp(/^[0-9]+$/);
 
-function buildYml({ parsed }, { inyml, outyml }, runnables) {
+function buildYml({ parsed }, { inyml, outyml, env }, runnables) {
   try {
     if (!parsed) {
       throw new Error(`File ${ENV_PATH} not found.`);
@@ -41,7 +41,9 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
       const runnable = runnables[key];
       console.log(`Starting injecting in ${runnable}.variables`);
       const paths = `${runnable}.variables`.split(".");
+
       let dataTree = data;
+
       for (const path of paths) {
         if (path in dataTree) {
           dataTree = dataTree[path];
@@ -73,6 +75,16 @@ function buildYml({ parsed }, { inyml, outyml }, runnables) {
         }
         // console.log(dataTree);
         //   console.log(data);
+
+        const runName = data;
+        // console.log(`runName`, runName);
+        const runContent = runName[runnable];
+        let network = env.split(".");
+        network = network[network.length - 1];
+        data[`${runnable}-${network}`] = runContent;
+        delete data[`${runnable}`];
+        // console.log(`data`, data);
+
         yamlStr = yaml.dump(data, {
           styles: {
             "!!null": "empty",
